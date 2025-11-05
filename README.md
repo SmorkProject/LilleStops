@@ -2,10 +2,13 @@
 ![logo](./assets/icon.png)
 
 ## Screen
-<img src="./MD/screen1.png" style="display:inline; width:200px;"/>
-<img src="./MD/screen2.png" style="display:inline; width:200px;"/>
-<img src="./MD/screen3.png" style="display:inline; width:200px;"/>
-<img src="./MD/screen4.png" style="display:inline; width:200px;"/>
+<p align="left">
+  <img src="./MD/screen1.png" width="200px" />
+  <img src="./MD/screen2.png" width="200px" />
+  <img src="./MD/screen3.png" width="200px" />
+  <img src="./MD/screen4.png" width="200px" />
+</p>
+
 
 ## languages
 | Flag                               | Name            |
