@@ -2,7 +2,10 @@
 ![logo](./assets/icon.png)
 
 ## Screen
-<img src="./MD/screen1.png" alt="Image 1" style="display:inline; width:200px;"/>
+<img src="./MD/screen1.png" style="display:inline; width:200px;"/>
+<img src="./MD/screen2.png" style="display:inline; width:200px;"/>
+<img src="./MD/screen3.png" style="display:inline; width:200px;"/>
+<img src="./MD/screen4.png" style="display:inline; width:200px;"/>
 
 ## languages
 | Flag                               | Name            |
