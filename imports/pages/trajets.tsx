@@ -1,0 +1,222 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { TrajetInfo, VLilleStation, translations } from '../../functions/types';
+import GetBusData from '../../functions/GetBusData';
+import GetVlille from '../../functions/GetVlille';
+import getLineStyle from '../../functions/getLineStyle';
+import Countdown from '../countdown';
+import WaveIcon from '../svg/waveIcon';
+import Svg, { Path } from 'react-native-svg';
+
+import style from "../../styles/trajets";
+
+const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any; deleteTrajets: (index: number, id: any) => any }> = ({
+  lang,
+  trajets,
+  trajetsDatas,
+  deleteTrajets
+}) => {
+  const translate = translations[lang];
+
+  const [trajetIndex, setTrajetIndex] = useState<number>(0);
+  const [allDeparturesData, setAllDeparturesData] = useState<any[]>([]);
+  const [vlilleStations, setVlilleStations] = useState<VLilleStation[]>([]);
+
+  const currentTrajet = trajets[trajetIndex];
+
+  /**
+   * get alls infos in apis
+   */
+  useEffect(() => {
+    const fetchBusData = async () => {
+      let data = await GetBusData();
+      setAllDeparturesData(data.AllDeparturesData)
+    };
+    const fetchVlilleData = async () => {
+      let data = await GetVlille();
+      setVlilleStations(data);
+    };
+
+    fetchBusData();
+    fetchVlilleData();
+  }, []);
+
+  /**
+   * search by id in a list json [{id:"..."...}...]
+   * @param list the list
+   * @param targetId the id in the list
+   * @returns return the object content de id
+   */
+  function getById<T extends { id: string }>(list: T[], targetId: string): T | undefined {
+    return list.find(item => item.id === targetId);
+  };
+
+  /**
+   * get the number of bikes dispo
+   * @param itemId the id for search the number of bikes dispo
+   * @returns the number of bikes
+   */
+  const BikesCount: React.FC<{ itemId: string }> = ({ itemId }) => {
+    const station = getById<any>(vlilleStations, itemId);
+
+    if (!station) {
+      return <Text style={style.statContentText}>...</Text>;
+    }
+
+    return <Text style={style.statContentText}>{station.bikes}</Text>;
+  };
+
+  /**
+   * get the number of docks dispo
+   * @param itemId the id for search the number of docks dispo
+   * @returns the number of docks
+   */
+  const DocksCount: React.FC<{ itemId: string }> = ({ itemId }) => {
+    const station = getById<any>(vlilleStations, itemId);
+
+    if (!station) {
+      return <Text style={style.statContentText}>...</Text>;
+    }
+
+    return <Text style={style.statContentText}>{station.docks}</Text>;
+  };
+
+  /**
+   * get the time for the Bus and tram
+   * @param itemId the id for search the time for bus and tram
+   * @returns the time for bus and tram
+   */
+  const BusTramCount: React.FC<{ itemId: string }> = ({ itemId }) => {
+    let datas = allDeparturesData.find(item => item.identifiant_station === itemId);
+    if (!datas) return <Text style={style.resultBoxContentInText}>...</Text>;
+    let time = new Date(datas.cle_tri?.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}\+\d{2}:\d{2})/)?.[1] || datas.heure_estimee_depart);
+
+
+    return <Countdown style2={style.resultBoxContentInText} key={time.toISOString()} targetDate={time} txt={translate.search.imminent} />;
+  };
+
+  /**
+   * bascule none to block and block to none
+   * @param index is the index in the table for get unique id for button
+   * @returns void
+   */
+  const [visibleStates, setVisibleStates] = useState<Record<number, boolean>>({});
+
+  // Function to toggle visibility for a specific item
+  const toggleView = (id: number) => {
+    setVisibleStates((prev) => ({
+      ...prev,
+      [id]: !prev[id], // Toggle the state for the specific item
+    }));
+  };
+
+  return (
+    <View style={style.background}>
+      <View style={style.box}>
+        <Text style={style.title}>✍️ {translate.trajets.title}</Text>
+        <TouchableOpacity onPress={() => {
+          let TrajetsLenght = trajets.length - 1;
+          if (TrajetsLenght !== 0) {
+            if (trajetIndex === TrajetsLenght) {
+              setTrajetIndex(0);
+            } else {
+              setTrajetIndex(trajetIndex + 1);
+            };
+          };
+        }}
+          style={style.buttonChange}
+        >
+          <Text style={style.buttonChangeText}>{currentTrajet.emoji}</Text>
+          <Text style={style.buttonChangeText}>{currentTrajet.name}</Text>
+          <Text style={[{ backgroundColor: currentTrajet.color }, style.buttonChangeText, style.buttonChangeNumber]}>
+            {(trajetsDatas[currentTrajet.id] ?? []).length}
+          </Text>
+        </TouchableOpacity>
+        <View id="boxtrajets">
+          {Array.isArray(trajetsDatas?.[currentTrajet?.id]) && trajetsDatas[currentTrajet.id].length > 0 ? (
+            trajetsDatas[currentTrajet.id].map((item: any, index: number) =>
+              item && item.type !== "vlille" ? (
+                <View style={style.resultBox} key={`${currentTrajet?.id}-${item?.id}-${index}`}>
+                  <View style={[style.resultLine, { backgroundColor: getLineStyle(item?.city?.split(" → ")[0]).bg }]}>
+                    <Text style={[{ color: getLineStyle(item?.city?.split(" → ")[0]).text }, style.resultLineText]}>
+                      {item?.city?.split(" → ")[0]}
+                    </Text>
+                  </View>
+                  <View style={style.resultBoxContentIn}>
+                    <Text style={[style.resultBoxContentInText, style.resultBoxcontentInTextTop]}>
+                      {translate?.search?.direction} {item?.city?.split(" → ")[1]}
+                    </Text>
+                    <TouchableOpacity onPress={() => toggleView(item.type + index)} style={style.resultBoxContentInButton}>
+                      <Svg width={20} height={20} fill="#fff" viewBox="0 0 20 20">
+                        <Path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </Svg>
+                    </TouchableOpacity>
+                    {visibleStates[item.type + index] && (
+                      <View style={style.deleteButtonBox}>
+                        <TouchableOpacity onPress={() => {deleteTrajets(index, currentTrajet?.id)}} >
+                          <Text style={{color: "#e2001a"}}>{translate?.trajets?.delete}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                  <View style={style.resultBoxContentIn2}>
+                    <View>
+                      <BusTramCount itemId={item?.id} />
+                    </View>
+                    <WaveIcon />
+                  </View>
+                </View>
+              ) : item ? (
+                <View style={style.resultBox} key={`${currentTrajet?.id}-${item?.id}-${index}`}>
+                  <View style={style.resultBoxContent1}>
+                    <View>
+                      <Text style={style.stationName}>{item?.name}</Text>
+                      <Text style={style.stationCity}>{item?.city}</Text>
+                    </View>
+
+                    <TouchableOpacity onPress={() => toggleView(item.type + index)} style={style.resultBoxContentInButton}>
+                      <Svg width={20} height={20} fill="#fff" viewBox="0 0 20 20">
+                        <Path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                      </Svg>
+                    </TouchableOpacity>
+
+                    {visibleStates[item.type + index] && (
+                      <View style={style.deleteButtonBox}>
+                        <TouchableOpacity onPress={() => {deleteTrajets(index, currentTrajet?.id)}}>
+                          <Text style={{color: "#e2001a"}}>{translate?.trajets?.delete}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={style.stats}>
+                    <View style={style.statContent}>
+                      <View style={style.statContentTop}>
+                        <Text style={style.statContentText}>🚲</Text>
+                          <BikesCount itemId={item?.id} />
+                        <WaveIcon />
+                      </View>
+                      <Text style={style.statContentText}>{translate.search.vlille_bikes_available}</Text>
+                    </View>
+                    <View style={style.statContent}>
+                      <View style={style.statContentTop}>
+                        <Text style={style.statContentText}>🅿️</Text>
+                          <DocksCount itemId={item?.id} />
+                        <WaveIcon />
+                      </View>
+                      <Text style={style.statContentText}>{translate.search.vlille_docks_available}</Text>
+                    </View>
+                  </View>
+                </View>
+              ) : null
+            )
+          ) : (
+            <Text style={style.noData}>{translate?.trajets?.noDatas}</Text>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export default Trajets;
