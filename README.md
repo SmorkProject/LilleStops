@@ -1,5 +1,5 @@
 # LilleStops
-![logo](./assets/icon.png)
+![logo](./assets/adaptive-icon.png)
 
 ## Screen
 <p align="left">

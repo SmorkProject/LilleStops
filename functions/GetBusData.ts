@@ -13,6 +13,7 @@ export default async () => {
   let data = await response.json();
 
   let stops = Array.from(new Set(data.records.map((r: any) => r.nom_station))).sort();
+  
   return {
     allStops: stops,
     AllDeparturesData: data.records,

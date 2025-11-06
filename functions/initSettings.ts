@@ -11,7 +11,6 @@ export default async () => {
   if (!theme) {
     let systemTheme     = Appearance.getColorScheme();
     let defaultTheme    = systemTheme === 'dark' ? 'black' : 'white';
-
     let getInfosRegion  = Localization.getLocales();
 
     await AsyncStorage.setItem("theme", defaultTheme);

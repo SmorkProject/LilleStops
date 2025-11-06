@@ -6,9 +6,9 @@ import { LINE_COLORS } from "./types";
  * @returns the line color ins HEX (#....)
  */
 export default (lineCode: string) => {
-  const upperLineCode = lineCode.toUpperCase();
-  const style = LINE_COLORS[upperLineCode] || LINE_COLORS['default'];
-  const isCircle = ['M1', 'M2', 'B1'].includes(upperLineCode);
+  let upperLineCode = lineCode.toUpperCase();
+  let style         = LINE_COLORS[upperLineCode] || LINE_COLORS['default'];
+  let isCircle      = ['M1', 'M2', 'B1'].includes(upperLineCode);
   
   return { ...style, isCircle };
 };

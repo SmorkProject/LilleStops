@@ -8,11 +8,21 @@ import style from "../../styles/settings";
 
 import { SettingsViewProps, langs, flags, translations } from "../../functions/types";
 
-const Settings: React.FC<SettingsViewProps> = ({ themeFile, theme, lang, trajets, onLangChange, onChangeTheme, onAddTrajet, onDeleteTrajet, onUpdateTrajetName }) => {
+const Settings: React.FC<SettingsViewProps> = ({
+  themeFile,
+  theme,
+  lang,
+  trajets,
+  onLangChange,
+  onChangeTheme,
+  onAddTrajet,
+  onDeleteTrajet,
+  onUpdateTrajetName
+}) => {
   const [realTheme, setRealTheme] = useState<String>(theme);
 
-  const translate = translations[lang];
-  const isMaxTrajets = trajets.length >= 6;
+  const translate     = translations[lang];
+  const isMaxTrajets  = trajets.length >= 6;
 
   return (
     <View style={themeFile.color1}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { TrajetInfo, VLilleStation, translations } from '../../functions/types';
+import { View, Text, TouchableOpacity, Pressable } from 'react-native';
+import { VLilleStation, translations, TrajetsViewPop } from '../../functions/types';
 import GetBusData from '../../functions/GetBusData';
 import GetVlille from '../../functions/GetVlille';
 import getLineStyle from '../../functions/getLineStyle';
@@ -10,7 +10,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import style from "../../styles/trajets";
 
-const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any; deleteTrajets: (index: number, id: any) => any, themeFile: any; }> = ({
+const Trajets: React.FC<TrajetsViewPop> = ({
   lang,
   trajets,
   trajetsDatas,
@@ -20,10 +20,10 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
   const [trajetIndex, setTrajetIndex]             = useState<number>(0);
   const [allDeparturesData, setAllDeparturesData] = useState<any[]>([]);
   const [vlilleStations, setVlilleStations]       = useState<VLilleStation[]>([]);
-  const [visibleStates, setVisibleStates] = useState<Record<number, boolean>>({});
+  const [visibleStates, setVisibleStates]         = useState<Record<number, boolean>>({});
 
   const currentTrajet = trajets[trajetIndex];
-  const translate = translations[lang];
+  const translate     = translations[lang];
   
   /**
    * get alls infos in apis
@@ -62,7 +62,7 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
 
     if (!station) {
       return <Text style={[style.statContentText, themeFile.text]}>...</Text>;
-    }
+    };
 
     return <Text style={[style.statContentText, themeFile.text]}>{station.bikes}</Text>;
   };
@@ -77,7 +77,7 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
 
     if (!station) {
       return <Text style={[style.statContentText, themeFile.text]}>...</Text>;
-    }
+    };
 
     return <Text style={[style.statContentText, themeFile.text]}>{station.docks}</Text>;
   };
@@ -96,17 +96,28 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
     return <Countdown style2={[style.resultBoxContentInText, themeFile.text]} key={time.toISOString()} targetDate={time} txt={translate.search.imminent} />;
   };
 
-
-  // Function to toggle visibility for a specific item
+  /**
+   * if u click in 3 dot button the button for delete object in list is visible
+   * @param id the id of button for show juste 1 button
+   * @returns avoid
+   */
   const toggleView = (id: number) => {
-    setVisibleStates((prev) => ({
-      ...prev,
-      [id]: !prev[id], // Toggle the state for the specific item
-    }));
+    return setVisibleStates({ [id]: !visibleStates[id] });
+  };
+
+  /**
+   * if u click without the delete button, the button is not visible
+   * @returns avoid
+   */
+  const clearVisibleStates = () => {
+    return setVisibleStates({});
   };
 
   return (
-    <View style={[style.background, themeFile.color1]}>
+    <Pressable
+      onPress={clearVisibleStates}
+      style={[style.background, themeFile.color1]}
+    >
       <View style={style.box}>
         <Text style={[style.title, themeFile.text]}>✍️ {translate.trajets.title}</Text>
         <TouchableOpacity onPress={() => {
@@ -142,7 +153,7 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
                       {translate?.search?.direction} {item?.city?.split(" → ")[1]}
                     </Text>
                     <TouchableOpacity onPress={() => toggleView(item.type + index)} style={[style.resultBoxContentInButton, themeFile.color3]}>
-                      <Svg width={20} height={20} fill={themeFile.text} viewBox="0 0 20 20">
+                      <Svg width={20} height={20} fill={themeFile.text.color} viewBox="0 0 20 20">
                         <Path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                       </Svg>
                     </TouchableOpacity>
@@ -210,7 +221,7 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
           )}
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

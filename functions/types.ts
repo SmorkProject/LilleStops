@@ -452,3 +452,36 @@ export const themes = {
   black: require('../styles/theme/black'),
   white: require('../styles/theme/white'),
 };
+
+export interface BoxAddInTrajetshViewProps {
+  setBoxDisplay: (data: boolean) => void;
+  AddInTrajets: (trajet: any) => void;
+  themeFile: any;
+  translate: any;
+  boxCity: any;
+  boxName: any;
+  boxtype: any;
+  trajets: any;
+};
+
+export interface TrajetsViewPop {
+  lang: string;
+  trajets: TrajetInfo[];
+  trajetsDatas: any;
+  deleteTrajets: (index: number, id: any) => any,
+  themeFile: any;
+};
+
+export interface CountDownViewPop {
+  targetDate: Date;
+  txt: string;
+  style2: any;
+};
+
+export interface NavigatorButtonViewPop {
+  onPress: () => void;
+  isActive: boolean;
+  children: String;
+  'aria-label': string;
+  themeFile: any;
+};

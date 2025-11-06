@@ -1,17 +1,12 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import type { BottomNavProps } from '../functions/types';
 import Svg, { Path } from 'react-native-svg';
+import { NavigatorButtonViewPop } from '../functions/types';
 
 import style from "../styles/navigator";
 
-const NavButton: React.FC<{
-  onPress: () => void;
-  isActive: boolean;
-  children: String;
-  'aria-label': string;
-  themeFile: any;
-}> = ({ onPress, isActive, children, 'aria-label': ariaLabel, themeFile}) => {
+const NavButton: React.FC<NavigatorButtonViewPop> = ({ onPress, isActive, children, 'aria-label': ariaLabel, themeFile}) => {
   if (isActive) {
     var css: any = style.actif;
   } else {

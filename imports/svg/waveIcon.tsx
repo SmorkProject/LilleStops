@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+let AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export default function WaveIcon() {
-  const opacityOuter = useRef(new Animated.Value(0)).current;
-  const opacityInner = useRef(new Animated.Value(0)).current;
+  let opacityOuter = useRef(new Animated.Value(0)).current;
+  let opacityInner = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.loop(

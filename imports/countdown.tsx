@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
+import { CountDownViewPop } from "../functions/types";
 
-const Countdown: React.FC<{ targetDate: Date; txt: string; style2: any; }> = ({ targetDate, txt, style2 }) => {
+const Countdown: React.FC<CountDownViewPop> = ({
+  targetDate,
+  txt,
+  style2
+}) => {
   const [countdown, setCountdown] = useState('');
 
   useEffect(() => {

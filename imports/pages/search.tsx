@@ -10,15 +10,23 @@ import getLineStyle from '../../functions/getLineStyle';
 
 import style from "../../styles/search";
 
-const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, setBoxId, setBoxType, setBoxname, themeFile}) => {
+const Search: React.FC<SearchViewProps> = ({
+  lang,
+  setBoxCity,
+  setBoxDisplay,
+  setBoxId,
+  setBoxType,
+  setBoxname,
+  themeFile
+}) => {
   const translate = translations[lang];
 
-  const [allBusStop, setAllBusStop] = useState<string[]>([]);
-  const [departures, setDepartures] = useState<any[]>([]);
-  const [allDeparturesData, setAllDeparturesData] = useState<any[]>([]);
-  const [searchMode, setSearchMode] = useState<'bus' | 'vlille'>('bus');
-  const [vlilleStations, setVlilleStations] = useState<VLilleStation[]>([]);
-  const [isVlilleLoading, setIsVlilleLoading] = useState<boolean>(true);
+  const [allBusStop, setAllBusStop]                 = useState<string[]>([]);
+  const [departures, setDepartures]                 = useState<any[]>([]);
+  const [allDeparturesData, setAllDeparturesData]   = useState<any[]>([]);
+  const [searchMode, setSearchMode]                 = useState<'bus' | 'vlille'>('bus');
+  const [vlilleStations, setVlilleStations]         = useState<VLilleStation[]>([]);
+  const [isVlilleLoading, setIsVlilleLoading]       = useState<boolean>(true);
 
   /**
    * get alls infos in apis
@@ -26,11 +34,13 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
   useEffect(() => {
     const fetchBusData = async () => {
       let data = await GetBusData();
+
       setAllBusStop(data.allStops as any);
       setAllDeparturesData(data.AllDeparturesData)
     };
     const fetchVlilleData = async () => {
       let data = await GetVlille();
+
       setVlilleStations(data);
       setIsVlilleLoading(false);
     };
@@ -119,7 +129,11 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
         };
       })
       .filter((d: any) => d.time.getTime() - now.getTime() >= 0)
-      .sort((a: any, b: any) => a.time.getTime() - b.time.getTime());
+      .sort((a: any, b: any) => a.time.getTime() - b.time.getTime())
+      .filter((item: any, index: number, arr: any[]) =>
+        arr.findIndex(i => i.direction === item.direction) === index
+      );
+
 
     setDepartures(filtered);
   }, [allDeparturesData]);
