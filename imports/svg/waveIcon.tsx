@@ -15,13 +15,13 @@ export default function WaveIcon() {
           toValue: 1,
           duration: 2000,
           easing: Easing.linear,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(opacityOuter, {
           toValue: 0,
           duration: 1000,
           easing: Easing.linear,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ])
     ).start();
@@ -32,13 +32,13 @@ export default function WaveIcon() {
           toValue: 1,
           duration: 1500,
           easing: Easing.linear,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(opacityInner, {
           toValue: 0,
           duration: 500,
           easing: Easing.linear,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ])
     ).start();

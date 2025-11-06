@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   background: {
-    backgroundColor: "#000",
     height: "100%"
   },
   box: {
@@ -12,19 +11,16 @@ export default StyleSheet.create({
     marginTop: 20,
     fontSize: 25,
     fontWeight: "700",
-    color: "#fff",
   },
   buttonChange: {
     display: "flex",
     flexDirection: "row",
     padding: 10,
-    backgroundColor: "#2b2b2b",
     borderRadius: 25,
     alignItems: "center",
     marginTop: 15
   },
   buttonChangeText: {
-    color: "#fff",
     fontSize: 16,
     marginLeft: 5
   },
@@ -33,23 +29,18 @@ export default StyleSheet.create({
     padding: 5,
   },
   resultBoxContentInText: {
-    color: "#fff",
     fontSize: 17,
   },
   resultBoxcontentInTextTop: {
     width: "70%"
   },
   noData: {
-    color: "#fff",
-    backgroundColor: "#2b2b2b",
     borderRadius: 10,
     marginTop: 20,
     padding: 20,
   },
   resultBox: {
-    backgroundColor: "#2b2b2b",
-    margin: 15,
-    width: "90%",
+    marginTop: 15,
     padding: 20,
     borderRadius: 15,
   },
@@ -67,17 +58,11 @@ export default StyleSheet.create({
     marginTop: 10
   },
   resultBoxContentInButton: {
-    backgroundColor: "#374151",
     padding: 5,
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 25,
     justifyContent: "center",
-  },
-  resultBoxContentInButtonText: {
-    color: "#fff",
-    fontSize: 20,
-    justifyContent: "center"
   },
   resultBoxContentIn2: {
     display: "flex",
@@ -91,7 +76,6 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   stationName: {
-    color: "#fff",
     fontSize: 17
   },
   stationCity: {
@@ -105,8 +89,7 @@ export default StyleSheet.create({
   },
   statContent: {
     display: "flex",
-    backgroundColor: "#181818",
-    padding: 20,
+    padding: 18,
     borderRadius: 5,
     alignItems: "center"
   },
@@ -118,15 +101,13 @@ export default StyleSheet.create({
   },
   statContentText: {
     fontSize: 17,
-    color: "#fff",
-    margin: 2
+    margin: 0
   },
   deleteButtonBox: {
     position: "absolute",
     right: 0,
     top: 50,
     zIndex: 1,
-    backgroundColor: "#181818",
     padding: 15,
     borderRadius: 15,
     display: "flex",

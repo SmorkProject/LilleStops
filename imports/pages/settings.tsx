@@ -8,20 +8,19 @@ import style from "../../styles/settings";
 
 import { SettingsViewProps, langs, flags, translations } from "../../functions/types";
 
-const Settings: React.FC<SettingsViewProps> = ({ theme, lang, trajets, onLangChange, onChangeTheme, onAddTrajet, onDeleteTrajet, onUpdateTrajetName }) => {
+const Settings: React.FC<SettingsViewProps> = ({ themeFile, theme, lang, trajets, onLangChange, onChangeTheme, onAddTrajet, onDeleteTrajet, onUpdateTrajetName }) => {
   const [realTheme, setRealTheme] = useState<String>(theme);
 
   const translate = translations[lang];
-
   const isMaxTrajets = trajets.length >= 6;
 
   return (
-    <View style={{ ...style.background }}>
+    <View style={themeFile.color1}>
       <View style={style.box}>
-        <Text style={style.title}>⚙️ {translate.settings.title}</Text>
+        <Text style={[style.title, themeFile.text]}>⚙️ {translate.settings.title}</Text>
 
-        <View style={style.themeBox}>
-          <Text style={style.title2}>{`🎨 ${translate.settings.theme.title}`}</Text>
+        <View style={[style.themeBox, themeFile.color2]}>
+          <Text style={[style.title2, themeFile.text]}>{`🎨 ${translate.settings.theme.title}`}</Text>
           <View style={style.buttonList}>
             <TouchableOpacity
               onPress={async () => {
@@ -29,7 +28,7 @@ const Settings: React.FC<SettingsViewProps> = ({ theme, lang, trajets, onLangCha
                 onChangeTheme("white")
                 setRealTheme("white")
               }}
-              style={[style.button, realTheme === "white" && style.buttonSelected]}
+              style={[style.button, realTheme === "white" && style.buttonSelected, themeFile.color3]}
             >
               <Text style={style.buttonText}>☀️</Text>
             </TouchableOpacity>
@@ -39,15 +38,15 @@ const Settings: React.FC<SettingsViewProps> = ({ theme, lang, trajets, onLangCha
                 onChangeTheme("black")
                 setRealTheme("black")
               }}
-              style={[style.button, realTheme === "black" && style.buttonSelected]}
+              style={[style.button, realTheme === "black" && style.buttonSelected, themeFile.color3]}
             >
               <Text style={style.buttonText}>🌙</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={style.themeBox}>
-          <Text style={style.title2}>{`✍️ ${translate.settings.trajets.title}`}</Text>
+        <View style={[style.themeBox, themeFile.color2]}>
+          <Text style={[style.title2, themeFile.text]}>{`✍️ ${translate.settings.trajets.title}`}</Text>
           <View style={style.trajetsList}>
             {trajets.map(trajet => (
               <View key={trajet.id} style={style.trajets}>
@@ -55,14 +54,14 @@ const Settings: React.FC<SettingsViewProps> = ({ theme, lang, trajets, onLangCha
                 <TextInput
                   value={trajet.name}
                   onChangeText={(text) => onUpdateTrajetName(trajet.id, text)}
-                  style={style.trajetsInput}
+                  style={[style.trajetsInput, themeFile.text, themeFile.color3]}
                 />
                 <TouchableOpacity
                   onPress={() => {
                     onDeleteTrajet(trajet.id)
                   }}
                   disabled={trajets.length <= 1}
-                  style={style.trajetsButtonDelete}
+                  style={[style.trajetsButtonDelete, themeFile.color3]}
                 >
                   <View>
                     <Svg viewBox="0 0 20 20" fill="#e2001a" width={20} height={20}>
@@ -81,33 +80,33 @@ const Settings: React.FC<SettingsViewProps> = ({ theme, lang, trajets, onLangCha
             <TouchableOpacity
               onPress={onAddTrajet}
               disabled={isMaxTrajets}
-              style={style.trajetsAdd}
+              style={[style.trajetsAdd, themeFile.color3]}
             >
-              <Svg viewBox="0 0 20 20" fill="#fff" width={20} height={20}>
+              <Svg viewBox="0 0 20 20" fill={themeFile.text.color} width={20} height={20}>
                 <Path
                   fillRule="evenodd"
                   clipRule="evenodd"
                   d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                 />
               </Svg>
-              <Text style={style.trajetsAddText}>{translate.settings.trajets.add}</Text>
+              <Text style={[style.trajetsAddText, themeFile.text]}>{translate.settings.trajets.add}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={style.themeBox}>
-          <Text style={style.title2}>{`🌐 ${translate.settings.lang.title}`}</Text>
+        <View style={[style.themeBox, themeFile.color2]}>
+          <Text style={[style.title2, themeFile.text]}>{`🌐 ${translate.settings.lang.title}`}</Text>
           <View style={style.buttonLangList}>
             {langs.map(l => (
               <TouchableOpacity
                 key={l}
                 onPress={() => onLangChange(l)}
-                style={[style.buttonLang, lang === l && style.buttonSelected]}
+                style={[style.buttonLang, lang === l && style.buttonSelected, themeFile.color3]}
               >
                 <View>
                   <Image source={flags[l]} />
                 </View>
-                <Text style={style.langText}>{l.toUpperCase()}</Text>
+                <Text style={[style.langText, themeFile.text]}>{l.toUpperCase()}</Text>
               </TouchableOpacity>
             ))}
           </View>

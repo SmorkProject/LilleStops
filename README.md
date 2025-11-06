@@ -8,6 +8,12 @@
   <img src="./MD/screen3.png" width="200px" />
   <img src="./MD/screen4.png" width="200px" />
 </p>
+<p align="left">
+  <img src="./MD/screen5.png" width="200px" />
+  <img src="./MD/screen6.png" width="200px" />
+  <img src="./MD/screen7.png" width="200px" />
+  <img src="./MD/screen8.png" width="200px" />
+</p>
 
 ## languages
 | Flag                               | Name            |

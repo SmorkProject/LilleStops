@@ -10,20 +10,21 @@ import Svg, { Path } from 'react-native-svg';
 
 import style from "../../styles/trajets";
 
-const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any; deleteTrajets: (index: number, id: any) => any }> = ({
+const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any; deleteTrajets: (index: number, id: any) => any, themeFile: any; }> = ({
   lang,
   trajets,
   trajetsDatas,
-  deleteTrajets
+  deleteTrajets,
+  themeFile
 }) => {
-  const translate = translations[lang];
-
-  const [trajetIndex, setTrajetIndex] = useState<number>(0);
+  const [trajetIndex, setTrajetIndex]             = useState<number>(0);
   const [allDeparturesData, setAllDeparturesData] = useState<any[]>([]);
-  const [vlilleStations, setVlilleStations] = useState<VLilleStation[]>([]);
+  const [vlilleStations, setVlilleStations]       = useState<VLilleStation[]>([]);
+  const [visibleStates, setVisibleStates] = useState<Record<number, boolean>>({});
 
   const currentTrajet = trajets[trajetIndex];
-
+  const translate = translations[lang];
+  
   /**
    * get alls infos in apis
    */
@@ -60,10 +61,10 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
     const station = getById<any>(vlilleStations, itemId);
 
     if (!station) {
-      return <Text style={style.statContentText}>...</Text>;
+      return <Text style={[style.statContentText, themeFile.text]}>...</Text>;
     }
 
-    return <Text style={style.statContentText}>{station.bikes}</Text>;
+    return <Text style={[style.statContentText, themeFile.text]}>{station.bikes}</Text>;
   };
 
   /**
@@ -75,10 +76,10 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
     const station = getById<any>(vlilleStations, itemId);
 
     if (!station) {
-      return <Text style={style.statContentText}>...</Text>;
+      return <Text style={[style.statContentText, themeFile.text]}>...</Text>;
     }
 
-    return <Text style={style.statContentText}>{station.docks}</Text>;
+    return <Text style={[style.statContentText, themeFile.text]}>{station.docks}</Text>;
   };
 
   /**
@@ -88,19 +89,13 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
    */
   const BusTramCount: React.FC<{ itemId: string }> = ({ itemId }) => {
     let datas = allDeparturesData.find(item => item.identifiant_station === itemId);
-    if (!datas) return <Text style={style.resultBoxContentInText}>...</Text>;
+    if (!datas) return <Text style={[style.resultBoxContentInText, themeFile.text]}>...</Text>;
     let time = new Date(datas.cle_tri?.match(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}\+\d{2}:\d{2})/)?.[1] || datas.heure_estimee_depart);
 
 
-    return <Countdown style2={style.resultBoxContentInText} key={time.toISOString()} targetDate={time} txt={translate.search.imminent} />;
+    return <Countdown style2={[style.resultBoxContentInText, themeFile.text]} key={time.toISOString()} targetDate={time} txt={translate.search.imminent} />;
   };
 
-  /**
-   * bascule none to block and block to none
-   * @param index is the index in the table for get unique id for button
-   * @returns void
-   */
-  const [visibleStates, setVisibleStates] = useState<Record<number, boolean>>({});
 
   // Function to toggle visibility for a specific item
   const toggleView = (id: number) => {
@@ -111,9 +106,9 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
   };
 
   return (
-    <View style={style.background}>
+    <View style={[style.background, themeFile.color1]}>
       <View style={style.box}>
-        <Text style={style.title}>✍️ {translate.trajets.title}</Text>
+        <Text style={[style.title, themeFile.text]}>✍️ {translate.trajets.title}</Text>
         <TouchableOpacity onPress={() => {
           let TrajetsLenght = trajets.length - 1;
           if (TrajetsLenght !== 0) {
@@ -124,11 +119,11 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
             };
           };
         }}
-          style={style.buttonChange}
+          style={[style.buttonChange, themeFile.color3]}
         >
-          <Text style={style.buttonChangeText}>{currentTrajet.emoji}</Text>
-          <Text style={style.buttonChangeText}>{currentTrajet.name}</Text>
-          <Text style={[{ backgroundColor: currentTrajet.color }, style.buttonChangeText, style.buttonChangeNumber]}>
+          <Text style={[style.buttonChangeText, themeFile.text]}>{currentTrajet.emoji}</Text>
+          <Text style={[style.buttonChangeText, themeFile.text]}>{currentTrajet.name}</Text>
+          <Text style={[{ backgroundColor: currentTrajet.color }, style.buttonChangeText, style.buttonChangeNumber, themeFile.text]}>
             {(trajetsDatas[currentTrajet.id] ?? []).length}
           </Text>
         </TouchableOpacity>
@@ -136,23 +131,23 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
           {Array.isArray(trajetsDatas?.[currentTrajet?.id]) && trajetsDatas[currentTrajet.id].length > 0 ? (
             trajetsDatas[currentTrajet.id].map((item: any, index: number) =>
               item && item.type !== "vlille" ? (
-                <View style={style.resultBox} key={`${currentTrajet?.id}-${item?.id}-${index}`}>
+                <View style={[style.resultBox, themeFile.color2]} key={`${currentTrajet?.id}-${item?.id}-${index}`}>
                   <View style={[style.resultLine, { backgroundColor: getLineStyle(item?.city?.split(" → ")[0]).bg }]}>
                     <Text style={[{ color: getLineStyle(item?.city?.split(" → ")[0]).text }, style.resultLineText]}>
                       {item?.city?.split(" → ")[0]}
                     </Text>
                   </View>
                   <View style={style.resultBoxContentIn}>
-                    <Text style={[style.resultBoxContentInText, style.resultBoxcontentInTextTop]}>
+                    <Text style={[style.resultBoxContentInText, style.resultBoxcontentInTextTop, themeFile.text]}>
                       {translate?.search?.direction} {item?.city?.split(" → ")[1]}
                     </Text>
-                    <TouchableOpacity onPress={() => toggleView(item.type + index)} style={style.resultBoxContentInButton}>
-                      <Svg width={20} height={20} fill="#fff" viewBox="0 0 20 20">
+                    <TouchableOpacity onPress={() => toggleView(item.type + index)} style={[style.resultBoxContentInButton, themeFile.color3]}>
+                      <Svg width={20} height={20} fill={themeFile.text} viewBox="0 0 20 20">
                         <Path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                       </Svg>
                     </TouchableOpacity>
                     {visibleStates[item.type + index] && (
-                      <View style={style.deleteButtonBox}>
+                      <View style={[style.deleteButtonBox, themeFile.color4]}>
                         <TouchableOpacity onPress={() => {deleteTrajets(index, currentTrajet?.id)}} >
                           <Text style={{color: "#e2001a"}}>{translate?.trajets?.delete}</Text>
                         </TouchableOpacity>
@@ -167,21 +162,21 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
                   </View>
                 </View>
               ) : item ? (
-                <View style={style.resultBox} key={`${currentTrajet?.id}-${item?.id}-${index}`}>
+                <View style={[style.resultBox, themeFile.color2]} key={`${currentTrajet?.id}-${item?.id}-${index}`}>
                   <View style={style.resultBoxContent1}>
                     <View>
-                      <Text style={style.stationName}>{item?.name}</Text>
+                      <Text style={[style.stationName, themeFile.text]}>{item?.name}</Text>
                       <Text style={style.stationCity}>{item?.city}</Text>
                     </View>
 
-                    <TouchableOpacity onPress={() => toggleView(item.type + index)} style={style.resultBoxContentInButton}>
+                    <TouchableOpacity onPress={() => toggleView(item.type + index)} style={[style.resultBoxContentInButton, themeFile.color3]}>
                       <Svg width={20} height={20} fill="#fff" viewBox="0 0 20 20">
                         <Path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                       </Svg>
                     </TouchableOpacity>
 
                     {visibleStates[item.type + index] && (
-                      <View style={style.deleteButtonBox}>
+                      <View style={[style.deleteButtonBox, themeFile.color4]}>
                         <TouchableOpacity onPress={() => {deleteTrajets(index, currentTrajet?.id)}}>
                           <Text style={{color: "#e2001a"}}>{translate?.trajets?.delete}</Text>
                         </TouchableOpacity>
@@ -190,28 +185,28 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
                   </View>
 
                   <View style={style.stats}>
-                    <View style={style.statContent}>
+                    <View style={[style.statContent, themeFile.color4]}>
                       <View style={style.statContentTop}>
-                        <Text style={style.statContentText}>🚲</Text>
+                        <Text style={[style.statContentText, themeFile.text]}>🚲</Text>
                           <BikesCount itemId={item?.id} />
                         <WaveIcon />
                       </View>
-                      <Text style={style.statContentText}>{translate.search.vlille_bikes_available}</Text>
+                      <Text style={[style.statContentText, themeFile.text]}>{translate.search.vlille_bikes_available}</Text>
                     </View>
-                    <View style={style.statContent}>
+                    <View style={[style.statContent, themeFile.color4]}>
                       <View style={style.statContentTop}>
-                        <Text style={style.statContentText}>🅿️</Text>
+                        <Text style={[style.statContentText, themeFile.text]}>🅿️</Text>
                           <DocksCount itemId={item?.id} />
                         <WaveIcon />
                       </View>
-                      <Text style={style.statContentText}>{translate.search.vlille_docks_available}</Text>
+                      <Text style={[style.statContentText, themeFile.text]}>{translate.search.vlille_docks_available}</Text>
                     </View>
                   </View>
                 </View>
               ) : null
             )
           ) : (
-            <Text style={style.noData}>{translate?.trajets?.noDatas}</Text>
+            <Text style={[style.noData, themeFile.text, themeFile.color2]}>{translate?.trajets?.noDatas}</Text>
           )}
         </View>
       </View>

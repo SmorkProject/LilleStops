@@ -72,6 +72,7 @@ export interface SettingsViewProps {
   theme: Theme;
   lang: Language;
   trajets: TrajetInfo[] | [];
+  themeFile: any;
   onChangeTheme: (theme: Theme) => void;
   onAddTrajet: () => void;
   onDeleteTrajet: (trajetId: string) => void;
@@ -81,6 +82,7 @@ export interface SettingsViewProps {
 
 export interface SearchViewProps {
   lang: Language;
+  themeFile: any;
   setBoxType: (datas: any) => void;
   setBoxname: (datas: any) => void;
   setBoxId: (datas: any) => void;
@@ -91,6 +93,7 @@ export interface SearchViewProps {
 export interface BottomNavProps {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
+  themeFile: any;
 }
 
 export const TRAJET_PRESETS: Omit<TrajetInfo, 'id' | 'name'>[] = [
@@ -443,4 +446,9 @@ export const flags: Record<Language, any> = {
   uz: require('../assets/langs/uz.png'),     // Ouzbek (Ouzbékistan)
   sa: require('../assets/langs/in.png'),     // Sanskrit (Inde)
   yi: require('../assets/langs/il.png'),     // Yiddish (Israël)
+};
+
+export const themes = {
+  black: require('../styles/theme/black'),
+  white: require('../styles/theme/white'),
 };

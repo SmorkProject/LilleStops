@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { View, Text, Pressable, TextInput, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import WaveIcon from '../svg/waveIcon';
 
 import { SearchViewProps, VLilleViewProps, Trajet, VLilleStation, SearchProps, translations } from "../../functions/types";
@@ -11,7 +10,7 @@ import getLineStyle from '../../functions/getLineStyle';
 
 import style from "../../styles/search";
 
-const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, setBoxId, setBoxType, setBoxname }) => {
+const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, setBoxId, setBoxType, setBoxname, themeFile}) => {
   const translate = translations[lang];
 
   const [allBusStop, setAllBusStop] = useState<string[]>([]);
@@ -76,12 +75,12 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
           value={query}
           onChangeText={handleInputChange}
           placeholder={translate.search.title}
-          style={style.search}
-          placeholderTextColor="#fff"
+          style={[style.search, themeFile.color3, themeFile.text]}
+          placeholderTextColor={themeFile.text.color}
         />
         <>
           {suggestions.length > 0 && (
-            <View style={style.searchResultBox}>
+            <View style={[style.searchResultBox, themeFile.color2]}>
               <>
                 {suggestions.map((stop) => (
                   <TouchableOpacity
@@ -89,7 +88,7 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
                     onPress={() => handleSuggestionClick(stop)}
                     style={style.searchResultButton}
                   >
-                    <Text style={style.searchResultButtonText}>{stop}</Text>
+                    <Text style={[style.searchResultButtonText, themeFile.text]}>{stop}</Text>
                   </TouchableOpacity>
                 ))}
               </>
@@ -199,12 +198,12 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
               onChangeText={handleInputChange}
               placeholder={translate.search.vlilleSearch}
               aria-label={translate.search.vlilleSearch}
-              style={style.search}
-              placeholderTextColor="#fff"
+              style={[style.search, themeFile.color3, themeFile.text]}
+              placeholderTextColor={themeFile.text.color}
             />
             <>
               {suggestions.length > 0 && (
-                <View style={style.searchResultBox}>
+                <View style={[style.searchResultBox, themeFile.color2]}>
                   <>
                     {suggestions.map(station => (
                       <TouchableOpacity
@@ -212,7 +211,7 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
                         onPress={() => handleSuggestionClick(station)}
                         style={style.searchResultButton}
                       >
-                        <Text style={style.searchResultButtonText}>{station.name} ({station.city})</Text>
+                        <Text style={[style.searchResultButtonText, themeFile.text]}>{station.name} ({station.city})</Text>
                       </TouchableOpacity>
                     ))}
                   </>
@@ -220,43 +219,45 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
               )}
             </>
           </View>
-
-          {filteredStations.length === 0 && !isLoading && (
-            <Text>{translate.search.noresult}</Text>
-          )}
+          
+          <View style={style.vlilleList}>
+            {filteredStations.length === 0 && !isLoading && (
+              <Text style={[style.noData, themeFile.text, themeFile.color2]}>{translate.search.noresult}</Text>
+            )}
+          </View>
 
           <View style={style.vlilleList}>
-            {filteredStations.map(station => (
-              <View key={station.id} style={style.resultBox}>
+            {filteredStations.slice(0, 10).map(station => (
+              <View key={station.id} style={[style.resultBox, themeFile.color2]}>
                 <View style={style.resultBoxContent1}>
                   <View>
-                    <Text style={style.stationName}>{station.name}</Text>
+                    <Text style={[style.stationName, themeFile.text]}>{station.name}</Text>
                     <Text style={style.stationCity}>{station.city}</Text>
                   </View>
                   <Pressable
                     onPress={() => onStartAddToTrajet(station)}
                     aria-label={`Add to a trajet`}
-                    style={style.resultBoxContentInButton}
+                    style={[style.resultBoxContentInButton, themeFile.color3]}
                   >
-                    <Text style={style.resultBoxContentInButtonText}>+</Text>
+                    <Text style={[style.resultBoxContentInButtonText, themeFile.text]}>+</Text>
                   </Pressable>
                 </View>
                 <View style={style.stats}>
-                  <View style={style.statContent}>
+                  <View style={[style.statContent, themeFile.color4]}>
                     <View style={style.statContentTop}>
-                      <Text style={style.statContentText}>🚲</Text>
-                      <Text style={style.statContentText}>{station.bikes}</Text>
+                      <Text style={[style.statContentText, themeFile.text]}>🚲</Text>
+                      <Text style={[style.statContentText, themeFile.text]}>{station.bikes}</Text>
                       <WaveIcon />
                     </View>
-                    <Text style={style.statContentText}>{translate.search.vlille_bikes_available}</Text>
+                    <Text style={[style.statContentText, themeFile.text]}>{translate.search.vlille_bikes_available}</Text>
                   </View>
-                  <View style={style.statContent}>
+                  <View style={[style.statContent, themeFile.color4]}>
                     <View style={style.statContentTop}>
-                      <Text style={style.statContentText}>🅿️</Text>
-                      <Text style={style.statContentText}>{station.docks}</Text>
+                      <Text style={[style.statContentText, themeFile.text]}>🅿️</Text>
+                      <Text style={[style.statContentText, themeFile.text]}>{station.docks}</Text>
                       <WaveIcon />
                     </View>
-                    <Text style={style.statContentText}>{translate.search.vlille_docks_available}</Text>
+                    <Text style={[style.statContentText, themeFile.text]}>{translate.search.vlille_docks_available}</Text>
                   </View>
                 </View>
               </View>
@@ -268,14 +269,14 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
   };
 
   return (
-    <View style={style.background}>
+    <View style={[style.background, themeFile.color1]}>
       <View style={style.navigatorBox}>
-        <View style={style.navigator}>
-          <TouchableOpacity style={[style.navigatorButton, searchMode === "bus" && style.selected]} onPress={() => setSearchMode("bus")} >
-            <Text style={style.navigatorButtonText}>{translate.search.bus}</Text>
+        <View style={[style.navigator, themeFile.color2]}>
+          <TouchableOpacity style={[style.navigatorButton, themeFile.color3, searchMode === "bus" && style.selected]} onPress={() => setSearchMode("bus")} >
+            <Text style={themeFile.text}>{translate.search.bus}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[style.navigatorButton, searchMode === "vlille" && style.selected]} onPress={() => setSearchMode("vlille")} >
-            <Text style={style.navigatorButtonText}>{translate.search.vlille}</Text>
+          <TouchableOpacity style={[style.navigatorButton, themeFile.color3, searchMode === "vlille" && style.selected]} onPress={() => setSearchMode("vlille")} >
+            <Text style={themeFile.text}>{translate.search.vlille}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -289,7 +290,7 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
                   {departures.length > 0 && (
                     <>
                       {departures.map(item => (
-                        <View key={item.time} style={style.resultBox}>
+                        <View key={item.time} style={[style.resultBox, themeFile.color2]}>
                           <View style={[style.resultLine, { backgroundColor: getLineStyle(item.line).bg }]}>
                             <Text style={[{ color: getLineStyle(item.line).text }, style.resultLineText]}>
                               {item.line}
@@ -297,7 +298,7 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
                           </View>
                           <View style={style.resultBoxContent}>
                             <View style={style.resultBoxContentIn}>
-                              <Text style={style.resultBoxContentInText}>{translate.search.direction} {item.direction}</Text>
+                              <Text style={[style.resultBoxContentInText, themeFile.text]}>{translate.search.direction} {item.direction}</Text>
                               <TouchableOpacity onPress={() => {
                                 setBoxType("Bus and trams");
                                 setBoxname(item.station)
@@ -305,15 +306,15 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
                                 setBoxCity(item.line + " → " + item.direction);
                                 setBoxDisplay(true);
                               }}
-                                style={style.resultBoxContentInButton}
+                                style={[style.resultBoxContentInButton, themeFile.color3]}
                               >
-                                <Text style={style.resultBoxContentInButtonText}>+</Text>
+                                <Text style={[style.resultBoxContentInButtonText, themeFile.text]}>+</Text>
                               </TouchableOpacity>
                             </View>
                             <View>
                               <View style={style.resultBoxContentIn2}>
                                 <View>
-                                  <Countdown style2={style.resultBoxContentInText} key={item.time.toISOString()} targetDate={item.time} txt={translate.search.imminent} />
+                                  <Countdown style2={[style.resultBoxContentInText, themeFile.text]} key={item.time.toISOString()} targetDate={item.time} txt={translate.search.imminent} />
                                 </View>
                                 <WaveIcon />
                               </View>

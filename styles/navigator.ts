@@ -1,9 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  background: {
-    backgroundColor: "#181818",
-  },
   buttonList: {
     display: "flex",
     flexDirection: "row",
@@ -14,7 +11,6 @@ export default StyleSheet.create({
     width: "100%",
   },
   text: {
-    color: "#fff",
     margin: 5,
     borderRadius: 25,
     padding: 10,
@@ -23,8 +19,5 @@ export default StyleSheet.create({
   },
   actif: {
     backgroundColor: "#e2001a",
-  },
-  inactif: {
-    backgroundColor: "#2b2b2b",
   },
 });
