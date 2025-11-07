@@ -200,7 +200,11 @@ const Search: React.FC<SearchViewProps> = ({
     }, [query, sortedStations]);
 
     if (isLoading) {
-      return <Text>{translate.search.loading}</Text>;
+      return (
+        <View style={style.vlilleBoxSearch}>
+          <Text style={[style.noData, themeFile.text, themeFile.color2]}>{translate.search.loading}</Text>
+        </View>
+      );
     };
 
     return (
