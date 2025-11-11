@@ -5,7 +5,7 @@ import { translations } from '@constants';
 import { fetchBusData } from '@services/busService';
 import { fetchVlilleData } from '@services/vlilleService';
 import { getLineStyle } from '@utils/transport';
-import { Countdown } from '@components/common/Countdown';
+import { Countdown } from '@/components/shared/Countdown';
 import { WaveIcon } from '@components/ui/WaveIcon';
 import Svg, { Path } from 'react-native-svg';
 
