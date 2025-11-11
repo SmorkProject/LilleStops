@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { useSettings, useTrajets, useTransportData } from '@hooks';
 import { BottomNav } from '@components';
-import { THEMES, TRANSLATIONS } from '@constants';
+import { themes, TRANSLATIONS } from '@constants';
 import { initSettings } from '@utils';
 import { Tab } from '@types';
 
 // Importation des pages (à migrer vers src/features/)
-import Trajets from './pages/trajets';
-import Settings from './pages/settings';
-import Search from './pages/search';
+import Trajets from '@features/trajets/trajets';
+import Settings from '@features/settings/settings';
+import Search from '@features/search/search';
 
 const AppRefactored: React.FC = () => {
   // Utilisation des hooks personnalisés
@@ -45,7 +45,7 @@ const AppRefactored: React.FC = () => {
   }, [loadSettings, loadTrajets]);
 
   // Récupération du thème et des traductions
-  const themeFile = THEMES[theme].default;
+  const themeFile = themes[theme].default;
   const translate = TRANSLATIONS[lang];
 
   // Rendu du composant actif
