@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { TrajetInfo, VLilleStation, translations } from '../../functions/types';
-import GetBusData from '../../functions/GetBusData';
-import GetVlille from '../../functions/GetVlille';
-import getLineStyle from '../../functions/getLineStyle';
-import Countdown from '../countdown';
-import WaveIcon from '../svg/waveIcon';
+import { TrajetInfo, VLilleStation, Language } from '@types';
+import { translations } from '@constants';
+import { fetchBusData } from '@services/busService';
+import { fetchVlilleData } from '@services/vlilleService';
+import { getLineStyle } from '@utils/transport';
+import { Countdown } from '@components/common/Countdown';
+import { WaveIcon } from '@components/ui/WaveIcon';
 import Svg, { Path } from 'react-native-svg';
 
-import style from "../../styles/trajets";
+import style from "../../../styles/trajets";
 
-const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any; deleteTrajets: (index: number, id: any) => any, themeFile: any; }> = ({
+const Trajets: React.FC<{ lang: Language; trajets: TrajetInfo[]; trajetsDatas: any; deleteTrajets: (index: number, id: any) => any, themeFile: any; }> = ({
   lang,
   trajets,
   trajetsDatas,
@@ -29,17 +30,17 @@ const Trajets: React.FC<{ lang: string; trajets: TrajetInfo[]; trajetsDatas: any
    * get alls infos in apis
    */
   useEffect(() => {
-    const fetchBusData = async () => {
-      let data = await GetBusData();
+    const loadBusData = async () => {
+      let data = await fetchBusData();
       setAllDeparturesData(data.AllDeparturesData)
     };
-    const fetchVlilleData = async () => {
-      let data = await GetVlille();
+    const loadVlilleData = async () => {
+      let data = await fetchVlilleData();
       setVlilleStations(data);
     };
 
-    fetchBusData();
-    fetchVlilleData();
+    loadBusData();
+    loadVlilleData();
   }, []);
 
   /**

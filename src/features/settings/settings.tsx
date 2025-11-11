@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Image } from 'react-native';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Image, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path } from 'react-native-svg';
+import { SettingsViewProps } from '@types';
+import { langs, flags, translations } from '@constants';
 
-import style from "../../styles/settings";
-
-import { SettingsViewProps, langs, flags, translations } from "../../functions/types";
+import style from "../../../styles/settings";
 
 const Settings: React.FC<SettingsViewProps> = ({ themeFile, theme, lang, trajets, onLangChange, onChangeTheme, onAddTrajet, onDeleteTrajet, onUpdateTrajetName }) => {
-  const [realTheme, setRealTheme] = useState<String>(theme);
+  const [realTheme, setRealTheme] = useState<string>(theme);
 
   const translate = translations[lang];
   const isMaxTrajets = trajets.length >= 6;

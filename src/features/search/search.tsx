@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { View, Text, Pressable, TextInput, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import WaveIcon from '../svg/waveIcon';
+import { View, Text, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { SearchViewProps, VLilleViewProps, VLilleStation, SearchProps } from '@types';
+import { translations } from '@constants';
+import { fetchBusData } from '@services/busService';
+import { fetchVlilleData } from '@services/vlilleService';
+import { getLineStyle } from '@utils/transport';
+import { Countdown } from '@components/common/Countdown';
+import { WaveIcon } from '@components/ui/WaveIcon';
 
-import { SearchViewProps, VLilleViewProps, Trajet, VLilleStation, SearchProps, translations } from "../../functions/types";
-import GetBusData from '../../functions/GetBusData';
-import GetVlille from '../../functions/GetVlille';
-import Countdown from '../countdown';
-import getLineStyle from '../../functions/getLineStyle';
-
-import style from "../../styles/search";
+import style from "../../../styles/search";
 
 const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, setBoxId, setBoxType, setBoxname, themeFile}) => {
   const translate = translations[lang];
@@ -24,19 +24,19 @@ const Search: React.FC<SearchViewProps> = ({ lang, setBoxCity, setBoxDisplay, se
    * get alls infos in apis
    */
   useEffect(() => {
-    const fetchBusData = async () => {
-      let data = await GetBusData();
+    const loadBusData = async () => {
+      let data = await fetchBusData();
       setAllBusStop(data.allStops as any);
       setAllDeparturesData(data.AllDeparturesData)
     };
-    const fetchVlilleData = async () => {
-      let data = await GetVlille();
+    const loadVlilleData = async () => {
+      let data = await fetchVlilleData();
       setVlilleStations(data);
       setIsVlilleLoading(false);
     };
 
-    fetchBusData();
-    fetchVlilleData();
+    loadBusData();
+    loadVlilleData();
   }, []);
 
   /**

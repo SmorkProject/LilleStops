@@ -1,10 +1,10 @@
-import { Language, Theme } from './common';
+import { Language, Theme, Tab } from './common';
 import { TrajetInfo } from './trajet';
 import { VLilleStation } from './transport';
 
 export interface BottomNavProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
+  activeTab: Tab;
+  onTabChange: (tab: Tab) => void;
   themeFile: any;
 }
 

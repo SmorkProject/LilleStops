@@ -8,7 +8,7 @@ import Trajets from '@features/trajets/trajets';
 import Settings from '@features/settings/settings';
 import Search from '@features/search/search';
 
-import style from "../styles/boxaddInTrajets";
+import style from "./styles/boxaddInTrajets";
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab]                 = useState<Tab>('search');
