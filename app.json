@@ -28,13 +28,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "73d1a316-70ed-4d1c-b95f-2cc37e3b2dc8"
-      }
-    },
     "plugins": [
       "expo-localization"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8dacc684-18c0-4563-9e5a-cf5ee61e1c92"
+      }
+    },
+    "owner": "smorkproject"
   }
 }

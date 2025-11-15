@@ -8,8 +8,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "expo-update": "expo update",
-    "build:beta": "eas build -p android --profile preview",
-    "build:stable": "eas build -p android --profile production",
+    "build:beta": "eas build -p android --profile preview --local",
+    "build:stable": "eas build -p android --profile production ",
     "doctor": "npx expo-doctor --verbose"
   },
   "dependencies": {
